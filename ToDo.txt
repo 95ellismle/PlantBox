@@ -1,0 +1,5 @@
+* Automatically scp data files to laptop if it is available (use a newDay variable that changes daily from False to True, if True try and scp the data and set to False, if False wait a day before setting to True).
+
+* Clean up the timing code. Maybe just have a single wrapper function that calls an input function at a certain time and returns a good exit code.
+
+* Clean up the error handling. Should check/report more errors to aid in debugging if something goes wrong. This should also make the code run `safer' so in the event of an error the code can cleanup (i.e. turn the lights off etc...)

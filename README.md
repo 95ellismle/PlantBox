@@ -31,17 +31,21 @@ Nearly everything!
   * Create an app (android -as I have an android) that interfaces with the raspberry pi.
   * Make the app change things in how the code runs.
   
-### Environment
+### Environment -watch the costs, this should be kept cheap!
   #### Sensing
   * Add temperature/humidity sensors (I have some DHT11 which should be sufficient)
   * Get PAR readings (the photosynthetically active radiation, basically light that plants like)
   * Get pH reading (for hydroponics)
-  #### Controlling -watch the costs, this should be kept cheap!
+  * Get dissolved oxygen reading (for hydroponics)
+  * Get CO2 readings.
+  
+  #### Controlling
   * Adjust light position (ideally mount the lights on a moveable rack, move up and down with motors)
   * Adjust temperature (close off the system, insulate and install heaters/coolers and fans)
   * Adjust hummidity (maybe have a mister or maybe just have a tray at the bottom of the device that can fill and drain water)
 
-### Image manipulation
+### Data
   * Write some code to detect the size of the plants (maybe identify where the plants are and measure the amount of mostly green pixels?)
   * Write some code to detect signs of an unhealthy plant (identify where the leaves are and pick out spots, how do I detect dryness/wilting?)
   * Stitch the images together into a timelapse (should be trivial with ffmpeg -maybe need to change the filenaming system)
+  * With the amount of plant growth as a metric automatically analyse the various enviromental factors that affect the plants growth.

@@ -14,6 +14,7 @@ lastTimeFilepath = "lasttimes.json"  # filepath for the lasttimes file
 allLastTimeVals = ['dataGet',  # The names of the last time values
                    'dataMove',  # these are the last times that the name
                    'lightCheck',   # has been adjusted.
+                   'movePics',
                    'takePic'] 
 
 badPathWarnings = 0  # How many warning occured about a bad path

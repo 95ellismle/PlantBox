@@ -6,7 +6,7 @@ import pandas as pd
 
 from src import err
 from src import const
-from src import timeutils as tutils
+from src import time_utils as tutils
 
 
 def initBluetooth(macAddress, port):
@@ -39,15 +39,16 @@ def combineDataFrames(data, data1):
 
 
 
-def parseStr(strs, oldData):
+def getData(s, oldData):
     """
     Will parse the data that is incoming from the bluetooth
     module.
 
     Inputs:
-        * strs => the message recieved from bluetooth module concanated together
+        * s => the connected socket class
         * oldData => the dictionary storing all the data to be updated.
     """
+    strs += s.recv(10).decode('utf-8')
     ltxt = strs.split('\n')
 
     # This will handle finding full messages in the str

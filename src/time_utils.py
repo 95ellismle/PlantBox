@@ -68,16 +68,19 @@ def getLastTimes(key=False):
             data = json.load(f)
          except json.JSONDecodeError:
             err.printLog("WARN: Reseting lastTimes dict as json is corrupted.")
-            timeNow = strTimeNow()
-            data = {i: timeNow for i in const.allLastTimeVals}
+            data = {i: strTimeNow() for i in const.allLastTimeVals}
             
    else:  # defaults to current time
-      timeNow = strTimeNow()
-      data = {i: timeNow for i in const.allLastTimeVals}
+      data = {i: strTimeNow() for i in const.allLastTimeVals}
 
+   # If a specific key is requested then return that data
    if key:
       if key in data:
          return dt.datetime.strptime(data[key], const.timeFormat)
+      elif key in const.allLastTimeVals:
+         timeNow = dt.datetime.now()
+         setLastTimes(key, timeNow)
+         return timeNow
       else:
          err.printLog("ERROR: key `%s` not available in the lastTimes dictionary" % key)
          msg = "\n\tKeys are:\n\t* %s" % "\n\t* ".join(const.allLastTimeVals)
@@ -121,3 +124,52 @@ def setLastTimes(key, value):
 
    return True
 
+
+def doEvent(eventName, function, timeDelta, *args):
+   """
+   Will check if the event `eventName' needs doing (by checking the lastTimes
+   dict). If it does need doing the function will be called.
+
+   Inputs:
+      * eventName => the name of the event in the lastTimes dictionary
+                     [str]
+      * function => the action to be carried out if the event needs doing
+                    [func]
+      * timeDelta => How often the event needs doing
+                    [dt.timedelta]
+      * *args => The arguments to pass to the function
+                 [tuple]
+
+   Outputs:
+      * Exit code (False means quit loop, True is OK)
+   """
+   carryOn = True
+   if eventName not in const.allLastTimeVals:
+      msg = "ERROR: Can't find the event called %s" %eventName
+      msg += " in the allLastTimeVals list."
+      err.printLog(msg)
+      carryOn = False
+
+   allGood, msg = err.typeCheck(timeDelta, dt.timedelta, "timeDelta (func doEvent)")
+   if allGood is False:
+      err.printLog("ERROR: %s" % msg)
+      carryOn = False
+
+   # Get the last time the event occured and check if it is time for it again
+   lastTimes = getLastTimes()
+   doEvent, newLastTime = isTime(lastTimes[eventName],
+                                 timeDelta)
+
+   # Actually carry out the func
+   carryOn = bool(newLastTime)
+   if doEvent:
+      carryOn = function(*args)
+
+   # Catch any naughty functions not returning with an exit code
+   if carryOn is None:
+      msg = "WARN: %s gives no exit code!" % str(function)
+      err.printLog(msg)
+      carryOn = True
+
+   # Set the new 'lastTime' the event occured
+   carryOn = tutils.setLastTimes(eventName, newLastTime)

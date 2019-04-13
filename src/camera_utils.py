@@ -1,10 +1,10 @@
 import os
 import time
 
-from src import timeutils as tutils
+from src import time_utils as tutils
 from src import err
 from src import const
-from src import lightControl as lights
+from src import light_utils as lights
 
 
 class Picture(object):

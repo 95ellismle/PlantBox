@@ -57,4 +57,7 @@ Nearly everything!
   * Change the way images are stored (just use a number in the filepath and store the corresponding datetime in a csv file)
   * Add user input for the frequency of various events (e.g. put in the const.py when to take pics, take data readings or check the lights)
   * Create an input file but still have defaults for all the settings.
+  * Automatically scp data to a laptop, if available, else wait until available and scp.
+  * Check which parts are available and use them if they are. E.g. if the USB is connected then get the data, if not don't save the data. If the camera is connected take pics, if not don't.
+  * Send some feedback to the RPi to determine whether the lights are connected? Pull up resistor?
   

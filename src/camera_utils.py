@@ -47,5 +47,5 @@ class Picture(object):
       self.cam.stop_preview()
    
       self.imgFilePath = imgFilePath
-      return True
+      return {'exit_code': True}
 

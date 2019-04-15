@@ -45,12 +45,12 @@ try:
          carryOn = False
        
        # Check if the lights should be on every second
-       carryOn = tutils.doEvent("lightCheck", lights.controlLights,
+       carryOn, _ = tutils.doEvent("lightCheck", lights.controlLights,
                                 dt.timedelta(0, 1), const.relayPins)
 
-       ## Read data                   -every 2 sec
-       #carryOn = tutils.doEvent("dataGet", arduino.getData,
-       #                         dt.timedelta(0, 2), *(sock, data, strs))
+       # Read data                   -every 2 sec
+       carryOn, ( = tutils.doEvent("dataGet", arduino.getData,
+                                dt.timedelta(0, 2), *(sock, data, strs))
 
        ## Move the data files       -every 0.5 days
        ##    This is done every so often so we don't store the full

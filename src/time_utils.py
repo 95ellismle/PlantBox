@@ -73,6 +73,10 @@ def getLastTimes(key=False):
    else:  # defaults to current time
       data = {i: strTimeNow() for i in const.allLastTimeVals}
 
+   for mKey in const.allLastTimeVals:
+      if mKey not in data:
+         data[mKey] = strTimeNow()
+
    # If a specific key is requested then return that data
    if key:
       if key in data:
@@ -156,9 +160,8 @@ def doEvent(eventName, function, timeDelta, *args):
       carryOn = False
 
    # Get the last time the event occured and check if it is time for it again
-   lastTimes = getLastTimes()
-   doEvent, newLastTime = isTime(lastTimes[eventName],
-                                 timeDelta)
+   lastTime = getLastTimes(eventName)
+   doEvent, newLastTime = isTime(lastTime, timeDelta)
 
    # Actually carry out the func
    carryOn = bool(newLastTime)
@@ -172,4 +175,4 @@ def doEvent(eventName, function, timeDelta, *args):
       carryOn = True
 
    # Set the new 'lastTime' the event occured
-   carryOn = tutils.setLastTimes(eventName, newLastTime)
+   carryOn = setLastTimes(eventName, newLastTime)

@@ -39,7 +39,7 @@ def combineDataFrames(data, data1):
 
 
 
-def getData(s, oldData):
+def getData(s, oldData, strs):
     """
     Will parse the data that is incoming from the bluetooth
     module.

@@ -30,24 +30,22 @@ class Picture(object):
    def capture(self):
       """ Will handle taking the picture and annotating it"""
 
-      try:
-         self.lightsOn()
-        
-         self.cam.resolution = (2592, 1944)
-         self.cam.rotation = 180
-         self.cam.annotate_text_size = 100
-         self.cam.annotate_text = tutils.strTimeNow()
-         self.cam.start_preview()
-         time.sleep(6)
-         imgName = "%s.jpg" % (tutils.strTimeNow())
-         imgName = imgName.replace(" ","_")
-         imgName = imgName.replace(":","x")
-         imgName = imgName.replace("/","-")
-         imgFilePath = "%s/%s" % (const.imgFolder, imgName)
-         self.cam.capture(imgFilePath)
-         self.cam.stop_preview()
+      self.lightsOn()
+      
+      self.cam.resolution = (2592, 1944)
+      self.cam.rotation = 180
+      #self.cam.annotate_text_size = 100
+      #self.cam.annotate_text = tutils.strTimeNow()
+      self.cam.start_preview()
+      time.sleep(6)
+      imgName = "%s.jpg" % (tutils.strTimeNow())
+      imgName = imgName.replace(" ","_")
+      imgName = imgName.replace(":","x")
+      imgName = imgName.replace("/","-")
+      imgFilePath = "%s/%s" % (const.imgFolder, imgName)
+      self.cam.capture(imgFilePath)
+      self.cam.stop_preview()
    
-         self.imgFilePath = imgFilePath
-      except:
-         self.carryOn = False
+      self.imgFilePath = imgFilePath
+      return True
 

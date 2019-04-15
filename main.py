@@ -48,23 +48,23 @@ try:
        carryOn = tutils.doEvent("lightCheck", lights.controlLights,
                                 dt.timedelta(0, 1), const.relayPins)
 
-       # Read data                   -every 2 sec
-       carryOn = tutils.doEvent("dataGet", arduino.getData,
-                                dt.timedelta(0, 2), *(sock, data, strs))
+       ## Read data                   -every 2 sec
+       #carryOn = tutils.doEvent("dataGet", arduino.getData,
+       #                         dt.timedelta(0, 2), *(sock, data, strs))
 
-       # Move the data files       -every 0.5 days
-       #    This is done every so often so we don't store the full
-       #     dataframe in the very limited memory.
-       carryOn = tutils.doEvent("dataMove", dutils.moveCSVData,
-                                dt.timedelta(0.5), data)
+       ## Move the data files       -every 0.5 days
+       ##    This is done every so often so we don't store the full
+       ##     dataframe in the very limited memory.
+       #carryOn = tutils.doEvent("dataMove", dutils.moveCSVData,
+       #                         dt.timedelta(0.5), data)
 
-       # Take a picture           -every 0.1 days
-       carryOn = tutils.doEvent("takePic", pic.capture,
-                                dt.timedelta(0.1))
+       ## Take a picture           -every 0.1 days
+       #carryOn = tutils.doEvent("takePic", pic.capture,
+       #                         dt.timedelta(0.1))
       
-       # Move pics to USB
-       carryOn = tutils.doEvent("movePics", dutils.movePics,
-                                dt.timedelta(1))
+       ### Move pics to USB
+       ##carryOn = tutils.doEvent("movePics", dutils.movePics,
+       ##                         dt.timedelta(1))
 
        time.sleep(2)  # Needs to be < 3 second for timestamp to be accurate
 

@@ -79,6 +79,6 @@ def getData(s, oldData, strs):
        newData.index = [dateTime for i in range(len(newData))]
        newData = combineDataFrames(oldData, newData)
        newData.to_csv(const.dataFilepath)
-       return retStrs, newData
+       return {"exit_code": True, "values": (retStrs, newData)}
 
-    return retStrs, oldData
+    return {"exit_code": True, "values": (retStrs, oldData)}

@@ -137,7 +137,9 @@ def doEvent(eventName, function, timeDelta, *args):
    Inputs:
       * eventName => the name of the event in the lastTimes dictionary
                      [str]
-      * function => the action to be carried out if the event needs doing
+      * function => the action to be carried out if the event needs doing.
+                    This function must return a dictionary with one key for
+                    an 'exit_code', and one key for 'values'.
                     [func]
       * timeDelta => How often the event needs doing
                     [dt.timedelta]
@@ -152,27 +154,42 @@ def doEvent(eventName, function, timeDelta, *args):
       msg = "ERROR: Can't find the event called %s" %eventName
       msg += " in the allLastTimeVals list."
       err.printLog(msg)
-      carryOn = False
+      return False, False
 
    allGood, msg = err.typeCheck(timeDelta, dt.timedelta, "timeDelta (func doEvent)")
    if allGood is False:
       err.printLog("ERROR: %s" % msg)
-      carryOn = False
+      return False, False
 
    # Get the last time the event occured and check if it is time for it again
    lastTime = getLastTimes(eventName)
    doEvent, newLastTime = isTime(lastTime, timeDelta)
 
    # Actually carry out the func
-   carryOn = bool(newLastTime)
+   carryOn *= bool(newLastTime)
    if doEvent:
-      carryOn = function(*args)
+       funcDict = function(*args)
 
+   allGood, msg = err.typeCheck(funcDict, dict, "funcDict (func doEvent)")
+   if allGood is False:
+      err.printLog("ERROR: %s" % msg)
+      return False, False
+
+   # Handle exit codes
+   if 'exit_code' in funcDict:
+      carryOn *= funcDict['exit_code']
    # Catch any naughty functions not returning with an exit code
-   if carryOn is None:
+   else:
       msg = "WARN: The function `%s` returns no exit code. Code this up!" % str(function)
       err.printLog(msg)
-      carryOn = True
+
+   # Will get the values returned
+   if 'values' in funcDict:
+      returners = funcDict['values']
+   else:
+      returners = False
 
    # Set the new 'lastTime' the event occured
-   carryOn = setLastTimes(eventName, newLastTime)
+   carryOn *= setLastTimes(eventName, newLastTime)
+
+   return carryOn, returners

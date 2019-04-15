@@ -1,3 +1,11 @@
+# Image and Data files
+img/
+img/*
+data/
+data/*
+*.jpg
+*/*.jpg
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

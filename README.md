@@ -52,6 +52,8 @@ Nearly everything!
   * With the amount of plant growth as a metric automatically analyse the various enviromental factors that affect the plants growth.
 
 ### Current Tasks:
+  * Create a kill file that has a variable in it and if that variable is set to stop then stop the code.
+  * Fix the data reading (doEvent function only returns an exit code atm)
   * Add some more error detection -permission errors with the writing of file to the USB pen, wrong gpio pins chosen, file not found etc...
   * Make variable names and file name consistent!
   * Change the way images are stored (just use a number in the filepath and store the corresponding datetime in a csv file)

@@ -170,7 +170,7 @@ def doEvent(eventName, function, timeDelta, *args):
 
    # Catch any naughty functions not returning with an exit code
    if carryOn is None:
-      msg = "WARN: %s gives no exit code!" % str(function)
+      msg = "WARN: The function `%s` returns no exit code. Code this up!" % str(function)
       err.printLog(msg)
       carryOn = True
 

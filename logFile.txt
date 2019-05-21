@@ -1,3 +1,0 @@
-14/04/19 21:44:07|  INFO: Bluetooth Connected
-14/04/19 21:44:09|  INFO: USB drive found at /media/pi/Data
-14/04/19 21:44:09|  INFO: Start Loop

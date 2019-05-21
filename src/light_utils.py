@@ -32,12 +32,12 @@ def switchLight(name, state):
         raise SystemExit(msg)
 
     if name not in const.gpioPins:
-        msg = "The name is not in the gpioPins dictionary. Correct names are:"
+        msg = "`%s` is not in the gpioPins dictionary. Correct names are:" % name
         msg += "\n\t*" + "\n\t*".join(const.gpioPins)
         raise SystemExit(msg)
 
     # Now actually switch the lights
     pin = const.gpioPins[name]
-    if gpio.read(pin) is not state:
+    if gpio.input(pin) is not state:
         gpio.output(pin, state)
 

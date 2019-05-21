@@ -4,14 +4,14 @@ import picamera as picam
 import datetime as dt
 import time
 
-from src import consts
+from src import const
 from src import light_utils as lUt
 
 ## Initialisation
 gpio.setmode(gpio.BCM)
 for pinType in ['Flash', 'GrowLight']:
-    gpio.setup(consts.gpioPins[pinType], gpio.OUT)
-    lUt.switchLight(consts.gpioPins[pinType], 'off')
+    gpio.setup(const.gpioPins[pinType], gpio.OUT)
+    lUt.switchLight(pinType, 'off')
 
 # Take a picture every 30 minutes
 #   * Turn off grow lights
@@ -40,8 +40,8 @@ def takePic():
     Will take a picture using the picamera and the picamera module.
     """
     # Turn off grow lights and turn on flash
-    lUt.switchLight(consts.gpioPins['GrowLight'], 'off')
-    lUt.switchLight(consts.gpioPins['Flash'], 'on')
+    lUt.switchLight('GrowLight', 'off')
+    lUt.switchLight('Flash', 'on')
 
     cam = picam.PiCamera()
     cam.start_preview()
@@ -50,7 +50,8 @@ def takePic():
     cam.capture(fileName)
     cam.stop_preview()
     
-    lUt.switchLight(consts.gpioPins['Flash'], 'off')
+    lUt.switchLight('Flash', 'off')
+
 
 gpio.cleanup()
 

@@ -1,7 +1,11 @@
 import os
+import Adafruit_DHT
+import json
 
 # Declare variables here
-gpioPins = {'Flash': 4, 'GrowLight': 17, 'Temperature': [22, 27]}
+gpioPins = {'Flash': 4, 'GrowLight': 17}
+sensorPins = {'DHT': [(Adafruit_DHT.DHT22, 22), (Adafruit_DHT.DHT11, 27)]}
+dynamicSettingsFile = "./dynSett.json"
 imgFolder = "./img"
 permDataStoragePath = "/media/pi/Data/"  # permanent data storage
 logFile = "logFile.txt"
@@ -11,15 +15,24 @@ finalLightHours = 10
 seedlingLightHours = 17
 rateOfChangeOfLight = 3.5
 
-lastTimeFilepath = "lasttimes.json"  # filepath for the lasttimes file
-allLastTimeVals = ['dataGet',  # The names of the last time values
-                   'dataMove',  # these are the last times that the name
-                   'lightCheck',   # has been adjusted.
-                   'movePics',
+lastTimeFilepath = "./lasttimes.json"  # filepath for the lasttimes file
+allLastTimeVals = ['lightCheck', 
                    'takePic'] 
 
 badPathWarnings = 0  # How many warning occured about a bad path
 
+initialDynSettings = {'lightOnTime': 0,
+                      'failedPins': []}
+"""
+Above this are settings to be set.
+
+
+
+
+
+
+Below this is code to initialise the settings 
+"""
 
 # Carry out any code that is related only to the variables
 #  set above
@@ -29,6 +42,9 @@ allGood = True
 if not os.path.isdir(imgFolder):
    os.makedirs(imgFolder)
 permDataStoragePath = os.path.abspath(permDataStoragePath)
+
+with open(dynamicSettingsFile, 'w') as f:
+    json.dump(initialDynSettings, f)
 
 if os.path.isfile(logFile):
    os.remove(logFile)

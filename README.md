@@ -1,27 +1,13 @@
 # PlantBox
 
-Making a device to look after my plants autonomously has been an ambition of mine for a while. This is the latest (and greatest) attempt to build such a device.
+Making a device to look after my plants autonomously has been an ambition of mine for a while. This is the latest (and greatest) attempt to build such a device. The device is basically a grow tent kitted out with LED lighting, some sensors, a camera and of course some plants.
 
 ## Aims of the project
-The project aims to create a cheap and highly modular system that is capable of looking after (productive) plants. The whole thing should eventually be very easy to install (place it down in a room and plug it in) and be very easy to maintain (just open the door and harvest when ready). However, this should not come at the cost of 'hackability', that is the whole thing should be easy to modify and improve for those who want to. In order to achieve this some key constraints need to be placed on the project from the start e.g:
-  
-  * Everything must be open-sourced. If a user wants to see the source code and change it (be it for good or bad) they should. Similarly for the hardware.
-  * The code and hardware must be divided into discrete modules. These will be almost standalone devices. Inter-modular connections may be soldered but intra-modular should be easy to disconnect and reconnect.
-  * The whole system should work with or without any individual module. These should be (were safe) replacable during run time, i.e. the full  system should not have to be shutdown everytime a new module is to be installed.
-  * The code and hardware should be easy to understand and well documented (e.g. consistent code throughout, enough comments, OOP etc). 
-  * To keep costs down, cheap microcontrollers should be used (i.e. arduino Nano, raspberry pi zero etc...). This also means very little computing power so things should be designed accordingly (i.e. code to be very lightweight).
-  * The code will need a nice interface for a user (eventually). An android app would be ideal.
- 
+The original project was quite ambitious so I thought I would tone it down slightly and create something more managable. The project is going to be a serious foray into the world of hobby hydroponics and a way to get some knowledge on vertical farms. Hopefully, I will also get some fruit and veg from it!
 
-## Current setup
-
-The project is very new and the current set up is very basic. The kit is comprised of:
-
-* Rpi Zero W : This is the brains of the operation. It contols when things should happen and handles storing the data produced. It also takes pictures
-* Arduino (genuino currently) : This recieves data from sensors (currently only light levels -in lux not PAR) it then broadcasts this info to the RPi via bluetooth every few seconds.
-* Various sensors : At the moment only a camera and a light level sensor.
-* Some grow lights : Fairly cheap, low powered grow lights. For testing on small plants.
-* Some plants (pink kale and basil): These are grown under the grow light, the pink kale is grown hydroponically (using the Kratky method) and the basil in soil.
+## Equipment List
+1 80x80x180 Grow Tent
+...
 
 ## TODO
 
@@ -34,7 +20,9 @@ Nearly everything!
   
 #### Environment -watch the costs, this should be kept cheap!
   ##### Sensing
-  * Add temperature/humidity sensors (I have some DHT11 which should be sufficient)
+  Basically code everything up... There are a few sensors I don't have at the moment and I'm trying to get by without them. Those high up on my wish list are pH sensor (needed), EC sensor (needed for nutrients), CO2 sensor (nice to have but not necessary), PAR sensor (nice to have), dissolved oxygen (nice to have)
+  * Create database to store data
+  * Add temperature/humidity sensors 
   * Get PAR readings (the photosynthetically active radiation, basically light that plants like)
   * Get pH reading (for hydroponics)
   * Get dissolved oxygen reading (for hydroponics)

@@ -169,6 +169,8 @@ def doEvent(eventName, function, timeDelta, *args):
    carryOn *= bool(newLastTime)
    if doEvent:
        funcDict = function(*args)
+   else:
+      funcDict = {'exit_code': True}
 
    allGood, msg = err.typeCheck(funcDict, dict, "funcDict (func doEvent)")
    if allGood is False:

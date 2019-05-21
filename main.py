@@ -4,74 +4,53 @@ import picamera as picam
 import datetime as dt
 import time
 
-from src import arduino_utils as arduino
-from src import light_utils as lights
-from src import test as testLib
-from src import err
-from src import const
-from src import time_utils as tutils
-from src import data_utils as dutils
-from src import camera_utils as mPiCam
-
-carryOn = True  # The variable that decides to exit the loop
+from src import consts
+from src import light_utils as lUt
 
 ## Initialisation
+gpio.setmode(gpio.BCM)
+for pinType in ['Flash', 'GrowLight']:
+    gpio.setup(consts.gpioPins[pinType], gpio.OUT)
+    lUt.switchLight(consts.gpioPins[pinType], 'off')
 
-# Init gpio
-gpio.setmode(gpio.BOARD)
-for pin in const.relayPins:
-   gpio.setup(pin, gpio.OUT)
-# Init bluetooth
-sock = arduino.initBluetooth(const.macAddress, const.port)
-# Init camera
-cam = picam.PiCamera()
-pic = mPiCam.Picture(cam)
+# Take a picture every 30 minutes
+#   * Turn off grow lights
+#   * Turn on flash
+#   * take picture (use raspistill for now)
+#   * Turn off flash (don't change grow lights)
 
-####
+# Check temperature every cycle
+#   * Check temperature from both sensors
+#   * If difference between sensors is very high (2C) then produce warning
+#   * Warning should print to log file.
 
-# Tests the lightsOn and Off functions -They should flash on and off
-testLib.testLightsFuncs(lights)
-carryOn = testLib.testUSBAddress()
+# Switch grow lights on if it is the right time
+#   * Grow lights can be on for 14hrs a day 07:00 - 22:30
+#   * Turn them off if temperature is too hot (need at least 12hrs)
+#   * Turn them on at 07:00 and keep them on until the tent is above 20C
+#   * Count the time they've been on and the time left in the day.
+#   * If 12 - (totalTimeOn + lightTimeLeft) <= 0: keep grow lights on
+#   * else: turn off grow lights for 10 mins
+#   * If temperature > 17.5: turn on extractor fan
+#   * Turn them off when taking a picture
 
-strs = ""
-data = dutils.getCurrData()
-err.printLog("INFO: Start Loop")
 
-try:
-    while carryOn is not False:
-       # Get the dict that stores when things were last done.
-       lastTimes = tutils.getLastTimes()
-       if lastTimes is False:
-         carryOn = False
-       
-       # Check if the lights should be on every second
-       carryOn, _ = tutils.doEvent("lightCheck", lights.controlLights,
-                                dt.timedelta(0, 1), const.relayPins)
+def takePic():
+    """
+    Will take a picture using the picamera and the picamera module.
+    """
+    # Turn off grow lights and turn on flash
+    lUt.switchLight(consts.gpioPins['GrowLight'], 'off')
+    lUt.switchLight(consts.gpioPins['Flash'], 'on')
 
-       # Read data                   -every 2 sec
-       carryOn, (strs, data) = tutils.doEvent("dataGet", arduino.getData,
-                                              dt.timedelta(0, 2), *(sock, data, strs))
+    cam = picam.PiCamera()
+    cam.start_preview()
+    time.sleep(5)
+    fUt.getFileName('./Img')
+    cam.capture(fileName)
+    cam.stop_preview()
+    
+    lUt.switchLight(consts.gpioPins['Flash'], 'off')
 
-       # Move the data files       -every 0.5 days
-       #    This is done every so often so we don't store the full
-       #     dataframe in the very limited memory.
-       carryOn, _ = tutils.doEvent("dataMove", dutils.moveCSVData,
-                                   dt.timedelta(0.5), data)
-
-       ## Take a picture           -every 0.1 days
-       #carryOn = tutils.doEvent("takePic", pic.capture,
-       #                         dt.timedelta(0.1))
-      
-       ### Move pics to USB
-       ##carryOn = tutils.doEvent("movePics", dutils.movePics,
-       ##                         dt.timedelta(1))
-
-       time.sleep(2)  # Needs to be < 3 second for timestamp to be accurate
-
-except KeyboardInterrupt:
-    err.printLog("INFO: Keyboard exit")
- 
-# Safely close bluetooth
-sock.close()
-lights.lightsOff(const.relayPins)
 gpio.cleanup()
+

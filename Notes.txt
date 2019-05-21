@@ -1,0 +1,3 @@
+Grow Lights must be on 24hrs for seedlings and 18
+
+ A function for decreasing the amount of light over a number of days ((1 - np.tanh(float(dayNum) / float(rateOfChange))) * (numHoursSeedling - numHoursFinal)) + numHoursFinal

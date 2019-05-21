@@ -21,11 +21,14 @@
   be 0x23 (by default).
 
 */
-
+#include <dht.h>
 #include <BH1750.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
 
+int DHTPIN = 7;
+
+dht DHT;
 BH1750 lightMeter;
 SoftwareSerial BT(10, 11);
 
@@ -52,15 +55,32 @@ void loop() {
 
   // Get light readings
   float lux = lightMeter.readLightLevel();
+  int chk = DHT.read11(DHTPIN);
   Serial.print("Light: ");
   Serial.print(lux);
   Serial.println(" lx");
+
+  Serial.print("Temp: ");
+  Serial.print(DHT.temperature);
+  Serial.println(" C");
+
+  Serial.print("Humidity: ");
+  Serial.print(DHT.humidity);
+  Serial.println(" %");
 
   // Handle Bluetooth
   Serial.println("Sending BT transmission");
   
   BT.print("$SLux=");
   BT.print(lux);
+  BT.println("$E");
+
+  BT.print("$STemp=");
+  BT.print(DHT.temperature);
+  BT.println("$E");
+
+  BT.print("$SHumidity=");
+  BT.print(DHT.humidity);
   BT.println("$E");
 //  BT.println(sendCounter);
   

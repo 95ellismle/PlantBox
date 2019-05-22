@@ -5,17 +5,21 @@ import json
 # Declare variables here
 gpioPins = {'Flash': 4, 'GrowLight': 17}
 sensorPins = {'DHT': [(Adafruit_DHT.DHT22, 22), (Adafruit_DHT.DHT11, 27)]}
-dynamicSettingsFile = "./dynSett.json"
 imgFolder = "./img"
 permDataStoragePath = "/media/pi/Data/"  # permanent data storage
-logFile = "logFile.txt"
 timeFormat = "%d/%m/%y %H:%M:%S"  # format for datetime printing
+files = {'mysqlCreateUserTemplate': '../mysql/create_user_TEMPLATE.sql',
+         'dynamicSettings': './dynSett.json',
+         'lastTimes': './lasttimes.json',
+         'sysLog': './logFile.txt'}
+
+mysql_user="plantBox3"
+mysql_passwd=""
 
 finalLightHours = 10
 seedlingLightHours = 17
 rateOfChangeOfLight = 3.5
 
-lastTimeFilepath = "./lasttimes.json"  # filepath for the lasttimes file
 allLastTimeVals = ['lightCheck', 
                    'takePic'] 
 

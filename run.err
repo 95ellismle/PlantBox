@@ -1,2 +1,0 @@
-main.py:16: RuntimeWarning: This channel is already in use, continuing anyway.  Use GPIO.setwarnings(False) to disable warnings.
-  gpio.setup(const.gpioPins[pinType], gpio.OUT)

@@ -10,6 +10,9 @@ from src import const
 from src import err
 from src import light_utils as lUt
 
+# Add a feature to turn off/on certain features
+
+
 ## Initialisation
 gpio.setmode(gpio.BCM)
 for pinType in ['Flash', 'GrowLight']:
@@ -57,20 +60,22 @@ def takePic():
     lUt.switchLight('GrowLight', 'off')
     lUt.switchLight('Flash', 'on')
 
-    cam = picam.PiCamera()
-    cam.start_preview()
-    time.sleep(5)
-    
-    imgFiles = [i for i in os.listdir(const.imgFolder) if '.jpg' in i]
-    imgNums = [i.strip('.jpg') for i in imgFiles]
-    imgNums = [int(i) for i in imgNums if is_num(i)]
-    newNum = 0
-    if imgNums:
-        newNum = max(imgNums) + 1
-    fileName = "%s/%i.jpg" % (const.imgFolder, newNum)
+    # It's maybe dangerous to have this in the loop -will experiment
+    with picam.PiCamera() as cam:
+        cam.resolution = (1640, 1232)
+        cam.start_preview()
+        time.sleep(5)
+        
+        imgFiles = [i for i in os.listdir(const.imgFolder) if '.jpg' in i]
+        imgNums = [i.strip('.jpg') for i in imgFiles]
+        imgNums = [int(i) for i in imgNums if is_num(i)]
+        newNum = 0
+        if imgNums:
+            newNum = max(imgNums) + 1
+        fileName = "%s/%i.jpg" % (const.imgFolder, newNum)
 
-    cam.capture(fileName)
-    cam.stop_preview()
+        cam.capture(fileName)
+        cam.stop_preview()
     
     lUt.switchLight('Flash', 'off')
 
@@ -135,6 +140,7 @@ while True:
             lUt.switchLight('GrowLight', 'off')
         time.sleep(1)
     except KeyboardInterrupt:
+        print("Exitting Loop")
         break
 
 

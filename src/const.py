@@ -8,12 +8,15 @@ sensorPins = {'DHT': [(Adafruit_DHT.DHT22, 22), (Adafruit_DHT.DHT11, 27)]}
 imgFolder = "./img"
 permDataStoragePath = "/media/pi/Data/"  # permanent data storage
 timeFormat = "%d/%m/%y %H:%M:%S"  # format for datetime printing
-files = {'mysqlCreateUserTemplate': '../mysql/create_user_TEMPLATE.sql',
+files = {'mysqlCreateUserTemplate': './mysql/create_user_TEMPLATE.sql',
+         'mysqlCreateUser': './mysql/create_user.sql',
+         'mysqlCreateUserSH': './mysql/create_user.sh',
+         'mysqlCreateUserSHTemplate': './mysql/create_user_TEMPLATE.sh',
          'dynamicSettings': './dynSett.json',
          'lastTimes': './lasttimes.json',
          'sysLog': './logFile.txt'}
 
-mysql_user="plantBox3"
+mysql_user="plantBox"
 mysql_passwd=""
 
 finalLightHours = 10
@@ -45,13 +48,15 @@ allGood = True
 # Handle various folder paths
 if not os.path.isdir(imgFolder):
    os.makedirs(imgFolder)
-permDataStoragePath = os.path.abspath(permDataStoragePath)
 
-with open(dynamicSettingsFile, 'w') as f:
+for fileName in files:
+    files[fileName] = os.path.abspath(files[fileName])
+
+with open(files['dynamicSettings'], 'w') as f:
     json.dump(initialDynSettings, f)
 
-if os.path.isfile(logFile):
-   os.remove(logFile)
+if os.path.isfile(files['sysLog']):
+   os.remove(files['sysLog'])
 
 
 def calculateLightTimeOn(dayNum, numHoursSeedling, numHoursFinal, rateOfChange=4):

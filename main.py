@@ -5,6 +5,7 @@ import Adafruit_DHT
 import datetime as dt
 import time
 import os
+import signal
 
 from src import const
 from src import err
@@ -13,11 +14,33 @@ from src import light_utils as lUt
 # Add a feature to turn off/on certain features
 
 
+def finalise():
+    """
+    Will finalise the whole code (cleanup the gpio pins, handle anything else
+    that needs to be cleaned up at the end of the code.
+    """
+    gpio.cleanup()
+
+
+def handle_exit(signal, frame):
+    """
+    Will handle exitting the code safely after a SIGTERM (kill)
+    signal has been passed to python.
+    """
+    finalise()
+    raise SystemExit("Exitting Gracefully")
+
+
 ## Initialisation
+signal.signal(signal.SIGTERM, handle_exit)
 gpio.setmode(gpio.BCM)
 for pinType in ['Flash', 'GrowLight']:
     gpio.setup(const.gpioPins[pinType], gpio.OUT)
     lUt.switchLight(pinType, 'off')
+    lUt.switchLight(pinType, 'on')
+    time.sleep(5)
+    lUt.switchLight(pinType, 'off')
+
 
 # Take a picture every 30 minutes
 #   * Turn off grow lights
@@ -121,10 +144,14 @@ def lightShouldBeOn():
     Determine whether the light should be on or not based on the time, temperature,
     how long it has been on already and how long is left in the day.
     """
+    if 21 >= dt.datetime.now().hour >= 7:
+        return True
+    else:
+        return False
+
 
 donePic = False
 while True:
-    
     try:
         # The camera
         if dt.datetime.now().minute % 30 == 0 and not donePic:
@@ -134,15 +161,17 @@ while True:
             donePic = False
 
         # The grow lights
-        if 21 >= dt.datetime.now().hour >= 7:
-            lUt.switchLight('GrowLight', 'on')
+        if lightShouldBeOn():
+            lUt.switchLight("GrowLight", "on")
         else:
-            lUt.switchLight('GrowLight', 'off')
+            lUt.switchLight("GrowLight", "off")
+        
         time.sleep(1)
+
     except KeyboardInterrupt:
         print("Exitting Loop")
         break
 
 
-gpio.cleanup()
+finalise()
 

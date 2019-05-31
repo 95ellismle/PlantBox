@@ -1,0 +1,13 @@
+31/05/19 10:14:59|  INFO: Taking pic `testPic.jpg'
+31/05/19 10:16:16|  WARNING | SENSOR BROKEN
+	 Pin = 22
+	 Type = DHT22	 Measurement = humidity
+31/05/19 10:16:16|  WARNING | SENSOR BROKEN
+	 Pin = 22
+	 Type = DHT22	 Measurement = temperature
+31/05/19 10:16:16|  WARNING | SENSOR BROKEN
+	 Pin = 16
+	 Type = DHT22	 Measurement = humidity
+31/05/19 10:16:16|  WARNING | SENSOR BROKEN
+	 Pin = 16
+	 Type = DHT22	 Measurement = temperature

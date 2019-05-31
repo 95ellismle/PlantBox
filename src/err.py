@@ -12,7 +12,7 @@ def printLog(msg):
    Inputs:
       * msg => message to print
    """
-   with open(const.logFile, 'a') as f:
+   with open(const.files['syslog'], 'a') as f:
       timeNow = dt.datetime.strftime(dt.datetime.now(),
                                      const.timeFormat)
       f.write(timeNow + "|  " + msg + "\n")

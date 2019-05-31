@@ -4,7 +4,9 @@ import json
 
 # Declare variables here
 gpioPins = {'Flash': 4, 'GrowLight': 17}
-sensorPins = {'DHT': [(Adafruit_DHT.DHT22, 22), (Adafruit_DHT.DHT11, 27)]}
+sensorPins = {'DHT': [(Adafruit_DHT.DHT22, 22),
+                      (Adafruit_DHT.DHT22, 27),
+                      (Adafruit_DHT.DHT22, 16)]}
 imgFolder = "./img"
 permDataStoragePath = "/media/pi/Data/"  # permanent data storage
 timeFormat = "%d/%m/%y %H:%M:%S"  # format for datetime printing
@@ -14,7 +16,7 @@ files = {'mysqlCreateUserTemplate': './mysql/create_user_TEMPLATE.sql',
          'mysqlCreateUserSHTemplate': './mysql/create_user_TEMPLATE.sh',
          'dynamicSettings': './dynSett.json',
          'lastTimes': './lasttimes.json',
-         'sysLog': './logFile.txt'}
+         'syslog': './logFile.txt'}
 
 mysql_user="plantBox"
 mysql_passwd=""
@@ -55,8 +57,8 @@ for fileName in files:
 with open(files['dynamicSettings'], 'w') as f:
     json.dump(initialDynSettings, f)
 
-if os.path.isfile(files['sysLog']):
-   os.remove(files['sysLog'])
+if os.path.isfile(files['syslog']):
+   os.remove(files['syslog'])
 
 
 def calculateLightTimeOn(dayNum, numHoursSeedling, numHoursFinal, rateOfChange=4):

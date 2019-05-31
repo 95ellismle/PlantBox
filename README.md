@@ -17,6 +17,7 @@ The original project was quite ambitious so I thought I would tone it down sligh
 1 Raspberry Pi Model 3B+
 1 Picam
 1 small white LED light matrix (for the flash)
+lots of wires
 ...
 
 
